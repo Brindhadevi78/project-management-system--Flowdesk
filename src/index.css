@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-theme-bg text-text-main antialiased overflow-hidden min-h-screen font-sans;
+  }
+}
+
+/* Custom scrollbars for clean look */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-300;
+}
+
+/* Styling for the purple card donut chart */
+.donut-segment {
+  stroke-dasharray: 47 53; /* 47% filled */
+  stroke-dashoffset: 25;   /* rotate to start at top */
+}
+
+/* Delicate subtle leaf pattern watermark mentioned in the graphic */
+.bg-leaf-pattern {
+  background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><path d="M100 0 C150 50 150 150 100 200 C50 150 50 50 100 0 Z" fill="%23fcfbfa" fill-opacity="0.5" /></svg>');
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: 50%;
+}
