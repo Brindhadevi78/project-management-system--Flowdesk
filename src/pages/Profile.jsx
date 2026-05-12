@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { useAuth } from '../context/AuthContext';
 
 export default function Profile() {
   const { profile, setProfile, stats } = useApp();
-  const { logout } = useAuth();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState(profile);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
-    setSaving(true);
-    try {
-      await setProfile(form);
-      setEditing(false);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
-    } finally {
-      setSaving(false);
-    }
+    setProfile(form);
+    setEditing(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
   };
 
   return (
@@ -38,9 +31,6 @@ export default function Profile() {
                 <i className="ph-fill ph-check-circle"></i> Saved!
               </span>
             )}
-            <button onClick={logout} className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 font-bold text-sm rounded-xl hover:bg-red-100 transition-colors">
-              <i className="ph ph-sign-out"></i> Logout
-            </button>
           </div>
         </header>
 
