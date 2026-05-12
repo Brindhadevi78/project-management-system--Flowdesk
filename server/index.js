@@ -148,7 +148,7 @@ app.delete('/api/projects', auth, (req, res) => {
 // ─── SERVE FRONTEND (must be after all API routes) ────────────────────────────
 const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
-app.get('*', (req, res) => {
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
