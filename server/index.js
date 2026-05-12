@@ -6,20 +6,10 @@ const path = require('path');
 const db = require('./db');
 
 const app = express();
-const PORT = 3001;
-const JWT_SECRET = 'pms_secret_key_change_in_production';
+const PORT = process.env.PORT || 3001;
+const JWT_SECRET = process.env.JWT_SECRET || 'flowdesk_secret_change_in_production';
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.some(o => origin.startsWith(o))) cb(null, true);
-    else cb(null, true); // allow all in production (same domain)
-  }
-}));
+app.use(cors());
 app.use(express.json());
 
 // ─── AUTH MIDDLEWARE ───────────────────────────────────────────────────────────
@@ -144,7 +134,7 @@ app.delete('/api/tasks/:id', auth, (req, res) => {
   res.json({ success: true });
 });
 
-// ─── BULK DELETE ROUTES ──────────────────────────────────────────────────────
+// ─── BULK DELETE ROUTES ───────────────────────────────────────────────────────
 app.delete('/api/tasks', auth, (req, res) => {
   db.prepare('DELETE FROM tasks WHERE user_id = ?').run(req.user.id);
   res.json({ success: true });
@@ -155,15 +145,11 @@ app.delete('/api/projects', auth, (req, res) => {
   res.json({ success: true });
 });
 
-// Serve frontend in production
+// ─── SERVE FRONTEND (must be after all API routes) ────────────────────────────
 const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
-
-// All non-API routes serve the React app
 app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(distPath, 'index.html'));
-  }
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 FlowDesk running on port ${PORT}`));

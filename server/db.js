@@ -1,7 +1,12 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 
-const db = new Database(path.join(__dirname, 'pms.db'));
+// On Render, use /tmp for writable storage. Locally use server/ folder.
+const dbPath = process.env.NODE_ENV === 'production'
+  ? '/tmp/pms.db'
+  : path.join(__dirname, 'pms.db');
+
+const db = new Database(dbPath);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -55,6 +60,6 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_tasks_project ON tasks(project_id);
 `);
 
-console.log('✅ Database initialized');
+console.log('✅ Database initialized at', dbPath);
 
 module.exports = db;

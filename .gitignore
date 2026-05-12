@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Env - keep .env.production for Render build
+.env
+
+# SQLite local DB
+server/pms.db
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
